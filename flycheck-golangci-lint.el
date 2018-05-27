@@ -38,7 +38,7 @@
 
 (flycheck-def-option-var flycheck-golangci-lint-deadline "1m" golangci-lint
   "Timeout for running golangci-lint, 1m by default."
-  :safe #'string)
+  :safe #'stringp)
 
 (flycheck-def-option-var flycheck-golangci-lint-tests nil golangci-lint
   "Analyze *_test.go files. It's false by default."
@@ -57,18 +57,18 @@ See URL `https://github.com/golangci/golangci-lint'."
   :command ("golangci-lint" "run" "--print-issued-lines=false"
 	    (option "--config" flycheck-golangci-lint-config concat)
 	    (option "--deadline=" flycheck-golangci-lint-deadline concat)
-	    (option "--tests" flycheck-golangci-lint-tests)
-	    (option "--fast" flycheck-golangci-lint-fast))
+	    (option-flag "--tests" flycheck-golangci-lint-tests)
+	    (option-flag "--fast" flycheck-golangci-lint-fast))
   :error-patterns
   ((error line-start (file-name) ":" line ":" column ": " (message) line-end))
   :modes go-mode)
 
 ;;;###autoload
 (defun flycheck-golangci-lint-setup ()
-  "Setup Flycheck Irony.
-Add `irony' to `flycheck-checkers'."
+  "Setup Flycheck GolangCI-Lint.
+Add `golangci-lint' to `flycheck-checkers'."
   (interactive)
-  (add-to-list 'flycheck-checkers 'irony))
+  (add-to-list 'flycheck-checkers 'golangci-lint))
 
 (provide 'flycheck-golangci-lint)
 ;;; flycheck-golangci-lint.el ends here

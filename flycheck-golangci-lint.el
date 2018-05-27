@@ -62,7 +62,8 @@ See URL `https://github.com/golangci/golangci-lint'."
 	    (option-flag "--tests" flycheck-golangci-lint-tests)
 	    (option-flag "--fast" flycheck-golangci-lint-fast))
   :error-patterns
-  ((error line-start (file-name) ":" line ":" column ": " (message) line-end))
+  ((error line-start (file-name) ":" line ":" column ": " (message) line-end)
+   (error line-start (file-name) ":" line ":" (message) line-end))
   :modes go-mode)
 
 ;;;###autoload

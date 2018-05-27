@@ -2,9 +2,11 @@
 
 ;; Copyright (C) 2018  Wei Jian Gan
 
-;; Author: Wei Jian Gan <weijiangan@Weis-MacBook-Pro.local>
+;; Author: Wei Jian Gan <weijiangan@outlook.com>
 ;; Keywords: convenience, tools, go
+;; URL: https://github.com/weijiangan/flycheck-golangci-lint
 ;; Version: 0.1.0
+;; Package-Requires: ((emacs "24") (flycheck "0.22"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

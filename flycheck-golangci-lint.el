@@ -60,7 +60,8 @@ See URL `https://github.com/golangci/golangci-lint'."
 	    (option "--config" flycheck-golangci-lint-config concat)
 	    (option "--deadline=" flycheck-golangci-lint-deadline concat)
 	    (option-flag "--tests" flycheck-golangci-lint-tests)
-	    (option-flag "--fast" flycheck-golangci-lint-fast))
+	    (option-flag "--fast" flycheck-golangci-lint-fast)
+	    ".")
   :error-patterns
   ((error line-start (file-name) ":" line ":" column ": " (message) line-end)
    (error line-start (file-name) ":" line ":" (message) line-end))

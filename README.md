@@ -2,7 +2,7 @@
 Flycheck checker for golangci-lint
 
 # Install
-## MELPA (coming soon)
+## MELPA
 ```
 M-x package-install flycheck-golangci-lint
 ```

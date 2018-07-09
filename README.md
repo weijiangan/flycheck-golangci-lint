@@ -29,7 +29,7 @@ If you have `use-package` installed
 # Available options
 `--config` (default: `nil`)
 ```lisp
-(setq flycheck-golangci-lint-config "path/to/config"
+(setq flycheck-golangci-lint-config "path/to/config")
 ```
 
 `--deadline` (default: `1m`)

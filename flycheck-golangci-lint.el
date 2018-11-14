@@ -47,6 +47,11 @@
   :safe #'booleanp
   :type 'boolean)
 
+(flycheck-def-option-var flycheck-golangci-lint-enable-golint nil golangci-lint
+  "Enable the 'golint' linter within golangci-lint"
+  :safe #'booleanp
+  :type 'boolean)
+
 (flycheck-def-option-var flycheck-golangci-lint-fast nil golangci-lint
   "Run only fast linters from the enabled set of linters. To find out which linters are fast run golangci-lint linters."
   :safe #'booleanp
@@ -61,6 +66,7 @@ See URL `https://github.com/golangci/golangci-lint'."
 	    (option "--deadline=" flycheck-golangci-lint-deadline concat)
 	    (option-flag "--tests" flycheck-golangci-lint-tests)
 	    (option-flag "--fast" flycheck-golangci-lint-fast)
+	    (option-flag "--enable=golint" flycheck-golangci-lint-enable-golint)
 	    ".")
   :error-patterns
   ((error line-start (file-name) ":" line ":" column ": " (message) line-end)

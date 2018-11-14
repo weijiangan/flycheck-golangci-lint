@@ -47,5 +47,10 @@ If you have `use-package` installed
 (setq flycheck-golangci-lint-fast t)
 ```
 
+`--enable=golint` (default: `nil`)
+```lisp
+(setq flycheck-golangci-lint-enable-golint t)
+```
+
 # Contribute
 Pull requests are welcomed :)

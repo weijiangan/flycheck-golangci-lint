@@ -47,5 +47,13 @@ If you have `use-package` installed
 (setq flycheck-golangci-lint-fast t)
 ```
 
+# GO Modules
+
+Make sure you have set GO111MODULE, if it's not the default in your Go version.
+
+```
+(setenv "GO111MODULE" "on")
+```
+
 # Contribute
 Pull requests are welcomed :)

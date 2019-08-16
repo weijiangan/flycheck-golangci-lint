@@ -89,6 +89,7 @@ See URL `https://github.com/golangci/golangci-lint'."
   :error-patterns
   ((error line-start (file-name) ":" line ":" column ": " (message) line-end)
    (error line-start (file-name) ":" line ":" (message) line-end))
+  :predicate (lambda () (not (string= "/dev/null\n" (shell-command-to-string "go env GOMOD"))))
   :modes go-mode)
 
 ;;;###autoload

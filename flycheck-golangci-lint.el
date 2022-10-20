@@ -62,6 +62,16 @@
   :safe #'booleanp
   :type 'boolean)
 
+(flycheck-def-option-var flycheck-golangci-allow-parallel-runners nil golangci-lint
+  "Allow multiple parallel golangci-lint instances running"
+  :safe #'booleanp
+  :type 'boolean)
+
+(flycheck-def-option-var flycheck-golangci-allow-serial-runners nil golangci-lint
+  "Allow multiple golangci-lint instances running, but serialize them around a lock"
+  :safe #'booleanp
+  :type 'boolean)
+
 (flycheck-def-option-var flycheck-golangci-lint-enable-linters nil golangci-lint
   "Enable specific linters"
   :type '(repeat (string :tag "linter"))
@@ -81,6 +91,8 @@ See URL `https://github.com/golangci/golangci-lint'."
             (option "--deadline=" flycheck-golangci-lint-deadline concat)
             (option-flag "--tests" flycheck-golangci-lint-tests)
             (option-flag "--fast" flycheck-golangci-lint-fast)
+            (option-flag "--allow-parallel-runners" flycheck-golangci-allow-parallel-runners)
+            (option-flag "--allow-serial-runners" flycheck-golangci-allow-serial-runners)
             (option-flag "--disable-all" flycheck-golangci-lint-disable-all)
             (option-flag "--enable-all" flycheck-golangci-lint-enable-all)
             (option-list "--disable=" flycheck-golangci-lint-disable-linters concat)

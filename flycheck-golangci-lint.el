@@ -88,7 +88,7 @@
 See URL `https://github.com/golangci/golangci-lint'."
   :command ("golangci-lint" "run" "--out-format=checkstyle"
             (option "--config=" flycheck-golangci-lint-config concat)
-            (option "--deadline=" flycheck-golangci-lint-deadline concat)
+            (option "--timeout=" flycheck-golangci-lint-deadline concat)
             (option-flag "--tests" flycheck-golangci-lint-tests)
             (option-flag "--fast" flycheck-golangci-lint-fast)
             (option-flag "--allow-parallel-runners" flycheck-golangci-allow-parallel-runners)

@@ -102,7 +102,7 @@ See URL `https://github.com/golangci/golangci-lint'."
   :error-patterns
   ((error line-start (file-name) ":" line ":" column ": " (message) line-end)
    (error line-start (file-name) ":" line ":" (message) line-end))
-  :modes go-mode)
+  :modes (go-mode go-ts-mode))
 
 ;;;###autoload
 (defun flycheck-golangci-lint-setup ()

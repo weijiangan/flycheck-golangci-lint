@@ -93,7 +93,7 @@ See URL `https://github.com/golangci/golangci-lint'."
             (option "--config=" flycheck-golangci-lint-config concat)
             (option "--timeout=" flycheck-golangci-lint-deadline concat)
             (option-flag "--tests" flycheck-golangci-lint-tests)
-            (option-flag "--fast" flycheck-golangci-lint-fast)
+            (option-flag "--fast-only" flycheck-golangci-lint-fast)
             (option-flag "--allow-parallel-runners" flycheck-golangci-allow-parallel-runners)
             (option-flag "--allow-serial-runners" flycheck-golangci-allow-serial-runners)
             (option-flag "--disable-all" flycheck-golangci-lint-disable-all)

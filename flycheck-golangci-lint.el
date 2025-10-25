@@ -82,14 +82,44 @@
   :type '(repeat (string :tag "linter"))
   :safe #'flycheck-string-list-p)
 
+(defvar flycheck-golangci-lint--version nil
+  "Cached golangci-lint version as (major minor patch).")
+
+(defun flycheck-golangci-lint--parse-version ()
+  "Parse golangci-lint version from --version output.
+Returns a list of (major minor patch) as integers, or nil if parsing fails."
+  (unless flycheck-golangci-lint--version
+    (let* ((output (ignore-errors
+                     (with-temp-buffer
+                       (call-process "golangci-lint" nil t nil "--version")
+                       (buffer-string))))
+           (version-regex "version \\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)"))
+      (when (and output (string-match version-regex output))
+        (setq flycheck-golangci-lint--version
+              (list (string-to-number (match-string 1 output))
+                    (string-to-number (match-string 2 output))
+                    (string-to-number (match-string 3 output)))))))
+  flycheck-golangci-lint--version)
+
+(defun flycheck-golangci-lint--output-format-flags ()
+  "Return appropriate output format flags based on golangci-lint version.
+v1.x uses --out-format=checkstyle
+v2.x uses --output.checkstyle.path=stdout (without --output.text.path=stderr
+which causes mixed output that breaks the checkstyle parser)."
+  (let ((version (flycheck-golangci-lint--parse-version)))
+    (if (and version (>= (car version) 2))
+        ;; v2.x: Use new format (without text output flag to avoid mixed output)
+        '("--output.checkstyle.path=stdout")
+      ;; v1.x or fallback: Use legacy format
+      '("--out-format=checkstyle"))))
+
 (flycheck-define-checker golangci-lint
   "A Go syntax checker using golangci-lint that's 5x faster than gometalinter
 
 See URL `https://github.com/golangci/golangci-lint'."
   :command ("golangci-lint"
             "run"
-            "--output.checkstyle.path=stdout"
-            "--output.text.path=stderr"
+            (eval (flycheck-golangci-lint--output-format-flags))
             (option "--config=" flycheck-golangci-lint-config concat)
             (option "--timeout=" flycheck-golangci-lint-deadline concat)
             (option-flag "--tests" flycheck-golangci-lint-tests)

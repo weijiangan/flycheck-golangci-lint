@@ -90,6 +90,7 @@ See URL `https://github.com/golangci/golangci-lint'."
             "run"
             "--output.checkstyle.path=stdout"
             "--output.text.path=stderr"
+            "--path-mode=abs"
             (option "--config=" flycheck-golangci-lint-config concat)
             (option "--timeout=" flycheck-golangci-lint-deadline concat)
             (option-flag "--tests" flycheck-golangci-lint-tests)

@@ -91,7 +91,7 @@ Returns a list of (major minor patch) as integers, or nil if parsing fails."
   (unless flycheck-golangci-lint--version
     (let* ((output (ignore-errors
                      (with-temp-buffer
-                       (call-process "golangci-lint" nil t nil "--version")
+                       (call-process flycheck-golangci-lint-executable nil t nil "--version")
                        (buffer-string))))
            (version-regex "version \\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)"))
       (when (and output (string-match version-regex output))

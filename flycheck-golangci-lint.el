@@ -82,7 +82,7 @@
   :type '(repeat (string :tag "linter"))
   :safe #'flycheck-string-list-p)
 
-(defvar flycheck-golangci-lint--version nil
+(defvar-local flycheck-golangci-lint--version nil
   "Cached golangci-lint version as (major minor patch).")
 
 (defun flycheck-golangci-lint--parse-version ()
@@ -91,7 +91,9 @@ Returns a list of (major minor patch) as integers, or nil if parsing fails."
   (unless flycheck-golangci-lint--version
     (let* ((output (ignore-errors
                      (with-temp-buffer
-                       (call-process flycheck-golangci-lint-executable nil t nil "--version")
+                       (call-process (or flycheck-golangci-lint-executable
+                                         (car (flycheck-checker-get 'golangci-lint 'command)))
+                                     nil t nil "--version")
                        (buffer-string))))
            (version-regex "version \\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)"))
       (when (and output (string-match version-regex output))

@@ -85,13 +85,17 @@
 (defvar flycheck-golangci-lint--version nil
   "Cached golangci-lint version as (major minor patch).")
 
+(defun flycheck-golangci-lint--executable ()
+  "Pick an executable to use"
+  (or flycheck-golangci-lint-executable "golangci-lint"))
+
 (defun flycheck-golangci-lint--parse-version ()
   "Parse golangci-lint version from --version output.
 Returns a list of (major minor patch) as integers, or nil if parsing fails."
   (unless flycheck-golangci-lint--version
     (let* ((output (ignore-errors
                      (with-temp-buffer
-                       (call-process flycheck-golangci-lint-executable nil t nil "--version")
+                       (call-process (flycheck-golangci-lint--executable) nil t nil "--version")
                        (buffer-string))))
            (version-regex "version \\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)"))
       (when (and output (string-match version-regex output))
@@ -109,7 +113,9 @@ which causes mixed output that breaks the checkstyle parser)."
   (let ((version (flycheck-golangci-lint--parse-version)))
     (if (and version (>= (car version) 2))
         ;; v2.x: Use new format (without text output flag to avoid mixed output)
-        '("--output.checkstyle.path=stdout")
+        '("--output.checkstyle.path=stdout"
+	  "--path-mode=abs"
+	  )
       ;; v1.x or fallback: Use legacy format
       '("--out-format=checkstyle"))))
 

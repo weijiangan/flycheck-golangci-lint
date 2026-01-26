@@ -113,7 +113,9 @@ which causes mixed output that breaks the checkstyle parser)."
   (let ((version (flycheck-golangci-lint--parse-version)))
     (if (and version (>= (car version) 2))
         ;; v2.x: Use new format (without text output flag to avoid mixed output)
-        '("--output.checkstyle.path=stdout")
+        '("--output.checkstyle.path=stdout"
+	  "--path-mode=abs"
+	  )
       ;; v1.x or fallback: Use legacy format
       '("--out-format=checkstyle"))))
 

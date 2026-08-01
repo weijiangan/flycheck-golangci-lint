@@ -6,7 +6,7 @@
 ;; Keywords: convenience, tools, go
 ;; URL: https://github.com/weijiangan/flycheck-golangci-lint
 ;; Version: 0.1.0
-;; Package-Requires: ((emacs "24") (flycheck "0.22"))
+;; Package-Requires: ((emacs "26") (flycheck "33"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -82,28 +82,34 @@
   :type '(repeat (string :tag "linter"))
   :safe #'flycheck-string-list-p)
 
-(defvar flycheck-golangci-lint--version nil
-  "Cached golangci-lint version as (major minor patch).")
+(defvar-local flycheck-golangci-lint--version nil
+  "Cached golangci-lint version as (EXECUTABLE . VERSION).
 
-(defun flycheck-golangci-lint--executable ()
-  "Pick an executable to use"
-  (or flycheck-golangci-lint-executable "golangci-lint"))
+EXECUTABLE is the resolved executable path the version was
+probed from, and VERSION is a list of (major minor patch) as
+integers.  The cache is keyed by executable so it self-invalidates
+when the buffer resolves a different golangci-lint, and is
+buffer-local since the version depends on which executable this
+buffer resolves to (see `flycheck-checker-executable').")
 
 (defun flycheck-golangci-lint--parse-version ()
   "Parse golangci-lint version from --version output.
 Returns a list of (major minor patch) as integers, or nil if parsing fails."
-  (unless flycheck-golangci-lint--version
-    (let* ((output (ignore-errors
-                     (with-temp-buffer
-                       (call-process (flycheck-golangci-lint--executable) nil t nil "--version")
-                       (buffer-string))))
-           (version-regex "version \\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)"))
-      (when (and output (string-match version-regex output))
-        (setq flycheck-golangci-lint--version
-              (list (string-to-number (match-string 1 output))
-                    (string-to-number (match-string 2 output))
-                    (string-to-number (match-string 3 output)))))))
-  flycheck-golangci-lint--version)
+  (let* ((executable (flycheck-find-checker-executable 'golangci-lint))
+         (cached (and executable
+                      (equal (car flycheck-golangci-lint--version) executable)
+                      (cdr flycheck-golangci-lint--version))))
+    (unless cached
+      (let ((output (ignore-errors
+                      (flycheck-call-checker-process-for-output 'golangci-lint nil nil "--version")))
+            (version-regex "version \\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)"))
+        (when (and output (string-match version-regex output))
+          (setq flycheck-golangci-lint--version
+                (cons executable
+                      (list (string-to-number (match-string 1 output))
+                            (string-to-number (match-string 2 output))
+                            (string-to-number (match-string 3 output))))))))
+    (cdr flycheck-golangci-lint--version)))
 
 (defun flycheck-golangci-lint--output-format-flags ()
   "Return appropriate output format flags based on golangci-lint version.
@@ -114,8 +120,7 @@ which causes mixed output that breaks the checkstyle parser)."
     (if (and version (>= (car version) 2))
         ;; v2.x: Use new format (without text output flag to avoid mixed output)
         '("--output.checkstyle.path=stdout"
-	  "--path-mode=abs"
-	  )
+          "--path-mode=abs")
       ;; v1.x or fallback: Use legacy format
       '("--out-format=checkstyle"))))
 

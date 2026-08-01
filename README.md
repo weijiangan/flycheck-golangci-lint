@@ -27,6 +27,29 @@ If you have `use-package` installed
 ```
 
 # Available options
+`flycheck-golangci-lint-executable` (default: `nil`, meaning `golangci-lint` found on `PATH`)
+
+Path to the golangci-lint executable, if it's not on `PATH` or you want to use a specific binary. This is a flycheck option (not a CLI flag), and it is honored both when probing the version and when running the checker.
+
+```lisp
+(setq flycheck-golangci-lint-executable "/path/to/golangci-lint")
+```
+
+It can also be set buffer-locally for per-project overrides:
+
+```lisp
+;; e.g. in go-mode-hook or flycheck-mode-hook
+(setq-local flycheck-golangci-lint-executable "~/bin/golangci-lint")
+```
+
+or per-directory via `.dir-locals.el`:
+
+```elisp
+((go-mode . ((flycheck-golangci-lint-executable . "/path/to/golangci-lint"))))
+```
+
+Note: the variable is marked `:risky`, so Emacs will ask for confirmation before applying file- or dir-local values.
+
 `--config` (default: `nil`)
 ```lisp
 (setq flycheck-golangci-lint-config "path/to/config")
